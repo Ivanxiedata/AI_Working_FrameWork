@@ -1,0 +1,10 @@
+.env*
+!.env.example
+/bin/
+# Vendored third-party skills (.skills/) and the copies installed for agents (make skills).
+/.skills/
+/.claude/skills/
+/.claude/agents/
+/.agents/skills/
+/.codex/
+.DS_Store

@@ -1,0 +1,28 @@
+# Third-party agent skills, pinned to exact commits. Installed by `make skills` (scripts/skills.sh).
+# Whitespace-separated fields, no quotes, no spaces inside a field. '#' starts a comment.
+#
+#   source  <name> <https-repo-url> <40-hex-commit-sha>
+#       Fetched into .skills/<name> (git-ignored). The script fails if HEAD is not exactly that sha.
+#   copy    <name> <subpath-in-repo> <dest-dir>
+#       Copies every path matching <subpath> (a trailing * is allowed) into <dest-dir>/<basename>.
+#       <dest-dir> must be under .claude/, .agents/ or .codex/. Copied, never symlinked.
+#   rewrite <name> <from> <to>
+#       After copying, replaces the literal text <from> with <to> in every installed text file of <name>.
+#       Use it when upstream docs hard-code per-user paths under ~; we never write into $HOME.
+#   `source` lines come first. Anything installed is tracked in .skills/manifest and replaced on the next run.
+#
+# Where agents look for project-level skills:
+#   Claude Code  .claude/skills/<name>/SKILL.md, .claude/agents/*.md
+#   Codex        .agents/skills/<name>/SKILL.md
+#
+# HOW TO ADD OR BUMP A PIN (never edit a sha without reading the diff):
+#   1. Clone the repo and read every file you will install (a bump: `git diff <old-sha> <new-sha>`), above all
+#      SKILL.md, *.py, *.js, *.sh. Look for: network calls, runtime pip/npm/curl installs, writes outside the skill
+#      folder (~, $HOME, /tmp), env or credential reads, new allowed-tools or hooks, obfuscated code, licence changes.
+#   2. Write the full 40-char sha below with a "vetted <date>: <licence>, <what it does at runtime>" comment above it.
+#   3. `make skills`, check the skills load, commit the lock with any doc change in one PR.
+#
+# Example (not installed):
+# source  my-skill  https://github.com/someone/my-skill  0123456789abcdef0123456789abcdef01234567
+# copy    my-skill  skills/my-skill  .claude/skills
+# copy    my-skill  skills/my-skill  .agents/skills
